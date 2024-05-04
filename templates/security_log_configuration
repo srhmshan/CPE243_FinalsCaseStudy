@@ -1,0 +1,27 @@
+/var/log/auth.log {
+    monthly
+    rotate 12
+    compress
+    delaycompress
+    missingok
+    notifempty
+    create 644 root adm
+    sharedscripts
+    postrotate
+        /bin/systemctl reload rsyslog >/dev/null 2>&1 || true
+    endscript
+}
+
+/var/log/fail2ban.log {
+    weekly
+    rotate 8
+    compress
+    delaycompress
+    missingok
+    notifempty
+    create 644 root adm
+    sharedscripts
+    postrotate
+        /bin/systemctl reload rsyslog >/dev/null 2>&1 || true
+    endscript
+}

@@ -1,0 +1,16 @@
+# Audit rules for monitoring file system changes
+-w /etc/passwd -p wa -k passwd_changes
+-w /etc/shadow -p wa -k shadow_changes
+-w /etc/sudoers -p wa -k sudoers_changes
+
+# Audit rules for monitoring user logins
+-w /var/log/wtmp -p wa -k logins
+-w /var/run/utmp -p wa -k logins
+
+# Audit rules for monitoring system calls
+-a exit,always -F arch=b64 -S execve -k syscalls
+-a exit,always -F arch=b32 -S execve -k syscalls
+
+# Audit rules for monitoring network activity
+-a exit,always -F arch=b64 -S bind -S connect -k network
+-a exit,always -F arch=b32 -S bind -S connect -k network

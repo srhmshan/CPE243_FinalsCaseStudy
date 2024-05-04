@@ -1,0 +1,31 @@
+---
+
+    - name: Add Suricata PPA repository
+      apt_repository:
+        repo: 'ppa:oisf/suricata-stable'
+        update_cache: yes
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Install Suricata package
+      apt:
+        name: suricata
+        state: present
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Copy Dockerfile to control node
+      copy:
+        src: ~/FinalExam_CPE243_Grant/Dockerfile
+        dest: ~/Dockerfile
+        force: yes
+
+    - name: Build Suricata Docker image
+      shell: |
+        docker build -t suricata-image .
+
+    - name: Run Suricata container
+      shell: |
+        docker run -d --name suricata-container suricata-image
+
+    - name: Verify Suricata installation
+      shell: |
+        suricata -V

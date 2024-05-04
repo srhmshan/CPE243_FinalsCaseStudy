@@ -1,0 +1,34 @@
+---
+
+#    - name: Update Ubuntu
+#      apt:
+#        upgrade: dist
+#        update_cache: yes
+#      when: ansible_distribution == "Ubuntu"
+
+    - name: Configure dpkg for Ubuntu
+      shell:
+        dpkg --configure -a
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Install pip for Python 3
+      apt:
+        name: python3-pip
+        state: present
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Install Docker Python SDK
+      pip:
+        name: docker-py
+        executable: pip3
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Add user to Docker group
+      shell:
+        usermod -aG docker srhmshan
+
+    - name: Enable and restart Docker service on Ubuntu
+      service:
+        name: docker
+        state: started
+        enabled: true
