@@ -1,9 +1,9 @@
 ---
 
-#- name: Update and upgrade packages
-#  apt:
-#    update_cache: yes
-#    upgrade: yes
+- name: Update and upgrade packages
+  apt:
+    update_cache: yes
+    upgrade: yes
 
 - name: Configure firewall
   ufw:
