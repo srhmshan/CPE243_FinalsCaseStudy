@@ -1,28 +1,42 @@
 ---
 
-    - name: Configure dpkg for Ubuntu
-      shell:
-        dpkg --configure -a
-      when: ansible_distribution == "Ubuntu"
-
-    - name: Install pip for Python 3
+    - name: Install required packages for Docker
       apt:
-        name: python3-pip
-        state: present
-      when: ansible_distribution == "Ubuntu"
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        update_cache: yes
 
-    - name: Install Docker Python SDK
-      pip:
-        name: docker-py
-        executable: pip3
-      when: ansible_distribution == "Ubuntu"
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable"
+        state: present
+
+    - name: Update apt package index (again)
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install Docker
+      apt:
+        name: docker-ce
+        state: present
 
     - name: Add user to Docker group
-      shell:
-        usermod -aG docker srhmshan
+      user:
+        name: srhmshan
+        groups: docker
+        append: yes
 
-    - name: Enable and restart Docker service on Ubuntu
+    - name: Enable and start Docker service on Ubuntu
       service:
         name: docker
         state: started
-        enabled: true
+        enabled: yes
