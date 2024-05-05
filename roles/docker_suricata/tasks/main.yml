@@ -14,7 +14,7 @@
 
     - name: Copy Dockerfile to control node
       copy:
-        src: ~/FinalExam_CPE243_Grant/Dockerfile
+        src: ~/CPE243_FinalsCaseStudy/Dockerfile
         dest: ~/Dockerfile
         force: yes
 
